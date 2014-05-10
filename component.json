@@ -13,11 +13,14 @@
     "component/domify": "*",
     "component/event": "*",
     "component/classes": "*",
-    "component/query": "*"
+    "component/query": "*",
+    "segmentio/extend": "*"
   },
   "development": {
-    "visionmedia/mocha": "*",
-    "dominicbarnes/expect.js": "*"
+    "dependencies": {
+      "visionmedia/mocha": "*",
+      "dominicbarnes/expect.js": "*"
+    }
   },
   "scripts": [
     "index.js"
@@ -28,5 +31,6 @@
   "templates": [
     "template.html"
   ],
-  "demo": "http://component.github.io/dialog/"
+  "demo": "http://component.github.io/dialog/",
+  "repository": "component/dialog"
 }

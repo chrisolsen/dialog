@@ -7,7 +7,6 @@ var Emitter = require('emitter')
   , overlay = require('overlay')
   , domify = require('domify')
   , events = require('event')
-  , extend = require('extend')
   , classes = require('classes')
   , query = require('query');
 
@@ -40,9 +39,12 @@ exports.Dialog = Dialog;
  */
 
 function dialog(title, msg){
-  if ('object' === typeof msg) return new Dialog(extend({ message: title }, msg || {}));
-  if ('string' === typeof msg) return new Dialog({ title: title, message: msg });
-  else                         return new Dialog({ message: title });
+  switch (arguments.length) {
+    case 2:
+      return new Dialog({ title: title, message: msg });
+    case 1:
+      return new Dialog({ message: title });
+  }
 };
 
 /**
@@ -63,10 +65,9 @@ function dialog(title, msg){
  */
 
 function Dialog(options) {
-
   Emitter.call(this);
   options = options || {};
-  this.template = options.template || require('./template.html');
+  this.template = require('./template.html');
   this.el = domify(this.template);
   this._classes = classes(this.el);
   this.render(options);
@@ -97,6 +98,12 @@ Dialog.prototype.render = function(options){
     , pEl = query('p', el)
     , msg = options.message;
 
+  events.bind(query('.close', el), 'click', function (ev) {
+    ev.preventDefault();
+    self.emit('close');
+    self.hide();
+  });
+
   if (titleEl) {
     if (!title) {
       titleEl.parentNode.removeChild(titleEl);
@@ -111,15 +118,6 @@ Dialog.prototype.render = function(options){
   } else if (msg) {
     pEl.parentNode.insertBefore(msg.el || msg, pEl);
     pEl.parentNode.removeChild(pEl);
-  }
-
-  var closeLink = query('.close', el);
-  if (closeLink) {
-    events.bind(closeLink, 'click', function (ev) {
-      ev.preventDefault();
-      self.emit('close');
-      self.hide();
-    });
   }
 };
 
