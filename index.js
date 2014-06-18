@@ -298,7 +298,7 @@ Dialog.prototype.hide = function(ms){
   }
 
   // hide / remove
-  self._classes.add('hide');
+  self._classes.add('fade-out');
   if (self._effect) {
     setTimeout(function(){
       self.remove();
